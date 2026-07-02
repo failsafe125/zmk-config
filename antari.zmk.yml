@@ -1,0 +1,7 @@
+file_format: 1
+id: antari
+name: Antari
+type: shield
+url: https://github.com/failsafe125/zmk-config
+features:
+  - keys
