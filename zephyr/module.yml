@@ -1,4 +1,1 @@
-build:
-  settings:
-    board-root: .
-    shield-root: .
+name: zmk-config
