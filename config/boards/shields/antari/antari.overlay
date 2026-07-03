@@ -1,10 +1,10 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 #include <dt-bindings/led/led.h>
+#include <physical_layouts.dtsi>
 
 /*
  * Antari2040 on XIAO nRF52840 (BLE)
  * 12 keys (4 wide x 3 tall) + encoder push button at row 2, col 4.
- * Pins from the official QMK firmware, translated to XIAO pin names:
  *   cols: D6, D5, D4, D3, D9   rows: D0, D1, D2
  *   encoder: A=D8, B=D7        RGB data: D10 (nRF port 1, pin 15)
  */
@@ -43,9 +43,8 @@
 
 / {
     chosen {
-        zmk,kscan = &kscan0;
-        zmk,matrix-transform = &default_transform;
         zmk,underglow = &led_strip;
+        zmk,physical-layout = &antari_layout;
     };
 
     default_transform: keymap_transform_0 {
@@ -57,6 +56,28 @@
             RC(1,0) RC(1,1) RC(1,2) RC(1,3)
             RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4)
         >;
+    };
+
+    antari_layout: antari_layout {
+        compatible = "zmk,physical-layout";
+        display-name = "Antari";
+        transform = <&default_transform>;
+        kscan = <&kscan0>;
+        keys  //                     w   h    x    y  rot rx ry
+            = <&key_physical_attrs 100 100    0    0    0  0  0>
+            , <&key_physical_attrs 100 100  100    0    0  0  0>
+            , <&key_physical_attrs 100 100  200    0    0  0  0>
+            , <&key_physical_attrs 100 100  300    0    0  0  0>
+            , <&key_physical_attrs 100 100    0  100    0  0  0>
+            , <&key_physical_attrs 100 100  100  100    0  0  0>
+            , <&key_physical_attrs 100 100  200  100    0  0  0>
+            , <&key_physical_attrs 100 100  300  100    0  0  0>
+            , <&key_physical_attrs 100 100    0  200    0  0  0>
+            , <&key_physical_attrs 100 100  100  200    0  0  0>
+            , <&key_physical_attrs 100 100  200  200    0  0  0>
+            , <&key_physical_attrs 100 100  300  200    0  0  0>
+            , <&key_physical_attrs 100 100  425  100    0  0  0>
+            ;
     };
 
     kscan0: kscan {

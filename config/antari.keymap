@@ -1,13 +1,9 @@
 /*
  * Antari2040 keymap
- * Layers: 3 rows of 4 keys, then the encoder push button as the
- * 13th (last) binding on each layer.
+ * 3 rows of 4 keys per layer, then the encoder push button as the
+ * 13th (last) binding.
  *
- * RGB controls live on the lower layer (hold 2nd-row-left key):
- *   top-2nd key   = RGB on/off
- *   mid-right key = next effect
- *   bottom-left   = cycle hue
- *   encoder twist = brightness up/down (on that layer only)
+ * Studio unlock: hold 2nd-row-left key, tap top row 3rd key.
  *
  * SPDX-License-Identifier: MIT
  */
@@ -30,6 +26,7 @@
         compatible = "zmk,keymap";
 
         default_layer {
+            display-name = "Media";
             bindings = <
                 &tog 1     &kp C_PREV   &kp C_PP     &kp C_NEXT
                 &mo 2      &kp C_VOL_DN &kp UP       &kp C_VOL_UP
@@ -39,6 +36,7 @@
         };
 
         num_layer {
+            display-name = "Numbers";
             bindings = <
                 &trans    &kp N7       &kp N8       &kp N9
                 &trans    &kp N4       &kp N5       &kp N6
@@ -48,15 +46,17 @@
         };
 
         lower_layer {
+            display-name = "BT/RGB";
             bindings = <
-                &bt BT_CLR      &rgb_ug RGB_TOG &sys_reset   &bootloader
-                &trans          &bt BT_SEL 3    &bt BT_SEL 4 &rgb_ug RGB_EFF
-                &rgb_ug RGB_HUI &bt BT_SEL 0    &bt BT_SEL 1 &bt BT_SEL 2    &none
+                &bt BT_CLR      &rgb_ug RGB_TOG &studio_unlock &bootloader
+                &trans          &bt BT_SEL 3    &bt BT_SEL 4   &rgb_ug RGB_EFF
+                &rgb_ug RGB_HUI &bt BT_SEL 0    &bt BT_SEL 1   &bt BT_SEL 2    &none
             >;
             sensor-bindings = <&rgb_encoder>;
         };
 
         raise_layer {
+            display-name = "Numpad";
             bindings = <
                 &kp KP_N7  &kp KP_N8    &kp KP_N9    &kp KP_DIVIDE
                 &kp KP_N4  &kp KP_N5    &kp KP_N6    &kp KP_MULTIPLY
