@@ -1,1 +1,4 @@
-name: zmk-config
+build:
+  settings:
+    shield_dirs:
+      - .
