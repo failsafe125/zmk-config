@@ -1,21 +1,52 @@
 #include <dt-bindings/zmk/matrix_transform.h>
+#include <dt-bindings/led/led.h>
+
+/*
+ * Antari2040 on XIAO nRF52840 (BLE)
+ * 12 keys (4 wide x 3 tall) + encoder push button at row 2, col 4.
+ * Pins from the official QMK firmware, translated to XIAO pin names:
+ *   cols: D6, D5, D4, D3, D9   rows: D0, D1, D2
+ *   encoder: A=D8, B=D7        RGB data: D10 (nRF port 1, pin 15)
+ */
+
+&pinctrl {
+    spi3_default: spi3_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>;
+        };
+    };
+    spi3_sleep: spi3_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi3 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+    pinctrl-0 = <&spi3_default>;
+    pinctrl-1 = <&spi3_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    led_strip: ws2812@0 {
+        compatible = "worldsemi,ws2812-spi";
+        reg = <0>;
+        spi-max-frequency = <4000000>;
+        chain-length = <12>;
+        spi-one-frame = <0x70>;
+        spi-zero-frame = <0x40>;
+        color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
+    };
+};
 
 / {
     chosen {
         zmk,kscan = &kscan0;
         zmk,matrix-transform = &default_transform;
+        zmk,underglow = &led_strip;
     };
-
-    /*
-     * Antari2040: 12 keys in a 4-wide x 3-tall grid, plus the encoder
-     * push button wired into the matrix at row 2, column 4.
-     * Electrically: 3 rows x 5 columns.
-     * Pins taken from the official QMK firmware (info.json), translated
-     * from RP2040 GP numbers to XIAO D-pin numbers:
-     *   cols: GP0=D6, GP7=D5, GP6=D4, GP29=D3, GP4=D9
-     *   rows: GP26=D0, GP27=D1, GP28=D2
-     *   encoder: A=GP2=D8, B=GP1=D7
-     */
 
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
