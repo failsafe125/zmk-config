@@ -38,14 +38,16 @@ config/
     Kconfig.shield
     Kconfig.defconfig
     boards/
-      seeeduino_xiao_ble.overlay        LED strip via SPI (nRF)
-      seeeduino_xiao_rp2040.overlay     LED strip via PIO (RP2040)
+      seeeduino_xiao_ble.overlay        LED strip (SPI) + soft off wake source
+      seeeduino_xiao_ble.conf           enables soft off (nRF only)
+      seeeduino_xiao_rp2040.overlay     LED strip (SPI0 on GP3)
 ```
 
 ## Building and flashing
 
-Push to GitHub. Actions builds two .uf2 files (one per board), attached
-as an artifact on the workflow run.
+Push to GitHub. Actions builds both boards and merges them into a
+single `firmware` artifact zip on the workflow run — two .uf2 files
+inside, named by board.
 
 1. Double-tap the reset button on the XIAO.
 2. A USB drive appears: XIAO-SENSE = nRF52840, RPI-RP2 = RP2040.
@@ -57,7 +59,8 @@ the Bluetooth keys on layer 2 do nothing.
 ## Layers
 
 Layer 0 (default): media prev/play/next on top row, volume and arrows
-below. Encoder twist = volume, press = mute.
+below. Encoder twist = volume. Encoder press: tap = mute, hold 5
+seconds = power off (see below).
 
 Layer 1 (numbers): tap top-left key to toggle in and out. Right 3x3
 grid becomes 7-8-9 / 4-5-6 / 1-2-3, bottom-left is 0.
@@ -68,6 +71,14 @@ Encoder twist = LED brightness on this layer.
 
 Layer 3 (hold 3rd-row-left key): numpad digits with / * - and
 + on the encoder press.
+
+## Power off / on (nRF board only)
+
+Hold the encoder press for 5 full seconds to power the board off
+completely (soft off — much deeper than sleep, ideal for battery).
+Press any key or the encoder to wake it; Bluetooth reconnects on
+its own. A quick tap still mutes as normal. On the RP2040 board
+the long hold does nothing.
 
 ## Live remapping (ZMK Studio)
 
@@ -91,11 +102,16 @@ until restored from inside Studio.
   board's defaults unless CONFIG_SERIAL, CONFIG_CONSOLE and
   CONFIG_UART_CONSOLE are also set to y. Only enable for debugging.
 
-## Case
+## Cases
 
-Two printable options were generated from the original cutting file
-(antari2040_cutting.ai): a faithful 4-plate stack (switch plate, two
-mid frames, bottom) and a one-piece tray that replaces the bottom
-three layers and the standoffs (M2x8 self-tapping screws instead).
+Printable STLs in this repo, generated from the original cutting
+file (antari2040_cutting.ai):
+
+- Stacked plate case: the faithful conversion of the original
+  acrylic sandwich design. Print all five plates, stack with the
+  PCB, fasten with M2 screws and standoffs per the original BOM.
+- Two-piece case: my own simpler design — fewer parts, easier
+  assembly.
+
 Switch cutouts are traced at 13.9mm; FDM printers may need ~0.15mm
 hole compensation or a 100.5% XY scale for switches to seat.
