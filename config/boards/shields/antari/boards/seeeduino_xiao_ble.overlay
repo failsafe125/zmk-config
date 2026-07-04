@@ -38,4 +38,11 @@
     chosen {
         zmk,underglow = &led_strip;
     };
+
+    /* Lets the key matrix wake the board from soft off:
+       any key press (including the encoder click) powers it back on. */
+    soft_off_wakers {
+        compatible = "zmk,soft-off-wakeup-sources";
+        wakeup-sources = <&kscan0>;
+    };
 };
